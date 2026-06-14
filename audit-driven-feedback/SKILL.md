@@ -8,10 +8,10 @@ description: >-
   (docs reference deleted code), config drift (.env vs config), parity gaps
   (routes without authorization, endpoints missing from the API spec), or broken data
   invariants — defects that pass tests AND review yet quietly break in production.
-  Trigger on mentions of audits, guardrails, drift detection, integrity/consistency
-  checks, "things silently breaking", turning a postmortem into an automated check,
-  stopping AI agents from leaving inconsistencies, or wiring integrity checks into CI
-  and scheduled jobs. Covers diagnosing what to audit (7 audit types), implementing
+  Trigger on mentions of audits, guardrails, drift detection, consistency checks,
+  "things silently breaking", turning a postmortem into an automated check, stopping
+  AI agents from leaving inconsistencies, or wiring checks into CI/scheduled jobs.
+  Covers diagnosing what to audit (7 audit types), implementing
   it, wiring into CI (prevention) + scheduled runs (recovery), and closing the
   detect → fix → re-audit loop. Language/framework-agnostic.
 ---

@@ -6,3 +6,6 @@ feedback.json
 # OS / editor
 .DS_Store
 Thumbs.db
+
+# packaged skill bundles (build artifacts; distribute via Releases)
+*.zip
