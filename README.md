@@ -38,14 +38,30 @@ audit-driven-feedback/
 ## インストール（Claude Code）
 
 パーソナルスキルとして使う場合、`audit-driven-feedback/` ディレクトリを
-スキル探索パスに置きます。
+スキル探索パス（`~/.claude/skills/`）に置きます。
+
+### 方法 A: Release の zip を使う（推奨）
+
+[Releases](https://github.com/IchikawaYoshihiro/audit_driven_feedback_skill/releases)
+から最新の `audit-driven-feedback-vX.Y.Z.zip` をダウンロードし、展開して中の
+`audit-driven-feedback/` ディレクトリを skills フォルダへコピーします。
+
+```bash
+# 例: 展開後
+# macOS / Linux
+cp -r audit-driven-feedback ~/.claude/skills/
+# Windows (PowerShell)
+Copy-Item -Recurse audit-driven-feedback "$env:USERPROFILE/.claude/skills/"
+```
+
+### 方法 B: リポジトリを clone する
 
 ```bash
 git clone git@github.com:IchikawaYoshihiro/audit_driven_feedback_skill.git
-# Windows (PowerShell)
-Copy-Item -Recurse audit_driven_feedback_skill/audit-driven-feedback "$env:USERPROFILE/.claude/skills/"
 # macOS / Linux
 cp -r audit_driven_feedback_skill/audit-driven-feedback ~/.claude/skills/
+# Windows (PowerShell)
+Copy-Item -Recurse audit_driven_feedback_skill/audit-driven-feedback "$env:USERPROFILE/.claude/skills/"
 ```
 
 以後、整合性ドリフト・監査・ガードレール関連の相談で自動的に発火します。
@@ -56,6 +72,21 @@ cp -r audit_driven_feedback_skill/audit-driven-feedback ~/.claude/skills/
 `evals/` が再現性確認、という3点セットで構成されています。
 
 📝 **[AIエージェント時代の品質保証 ― 監査駆動フィードバック開発という考え方](https://zenn.dev/ichikawa_y/articles/audit-driven-feedback-development)**
+
+## 開発 / リリース
+
+- **lint**: `tools/lint_skill.py` がスキルフォーマット（`name` / `description` の制約、
+  enum・boolean フィールド、ディレクトリ名一致、本文の相対リンク参照切れ等）を検査します。
+  PR / `main` への push で CI が自動実行します。手元では `python tools/lint_skill.py`
+  （要 `pip install pyyaml`）。
+- **release**: `vX.Y.Z` 形式のタグを push すると、CI が lint を通したうえで
+  `audit-driven-feedback-vX.Y.Z.zip` をビルドし、GitHub Release に添付します。
+  バージョンはタグで管理します（初回は `v1.0.0`）。
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0   # → Actions が Release を発行
+```
 
 ## ライセンス
 
