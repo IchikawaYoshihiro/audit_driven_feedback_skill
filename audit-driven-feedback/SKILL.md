@@ -2,20 +2,18 @@
 name: audit-driven-feedback
 description: >-
   Introduce and operate Audit-Driven Feedback Development — a reconciliation-loop
-  methodology that keeps a codebase internally consistent when AI agents do most of
-  the implementation. Use this whenever the user wants to catch "silent integrity
-  drift": wiring gaps (a feature was added but its notification/event/listener was
-  never connected), doc drift (docs reference code that no longer exists), config
-  drift (.env vs config), parity gaps (routes with no authorization, endpoints
-  missing from the API spec), or broken data invariants — the class of defect that
-  passes tests AND review yet quietly breaks in production. Trigger when the user
-  mentions audits, guardrails, drift detection, integrity/consistency checks, "things
-  silently breaking", "we keep forgetting to wire X", wants to turn a postmortem or
-  incident into an automated check, asks how to stop AI agents from leaving
-  inconsistencies behind, or wants to wire integrity checks into CI and scheduled
-  jobs. Covers the full path: diagnosing WHAT to audit (7 audit types), implementing
-  the audit command, wiring it into CI (prevention) and scheduled runs (recovery),
-  and closing the detect → fix → re-audit loop. Language- and framework-agnostic.
+  method that keeps a codebase internally consistent when AI agents do most of the
+  implementation. Use whenever the user wants to catch silent integrity drift:
+  wiring gaps (a feature added but its listener/notification never wired), doc drift
+  (docs reference deleted code), config drift (.env vs config), parity gaps
+  (routes without authorization, endpoints missing from the API spec), or broken data
+  invariants — defects that pass tests AND review yet quietly break in production.
+  Trigger on mentions of audits, guardrails, drift detection, integrity/consistency
+  checks, "things silently breaking", turning a postmortem into an automated check,
+  stopping AI agents from leaving inconsistencies, or wiring integrity checks into CI
+  and scheduled jobs. Covers diagnosing what to audit (7 audit types), implementing
+  it, wiring into CI (prevention) + scheduled runs (recovery), and closing the
+  detect → fix → re-audit loop. Language/framework-agnostic.
 ---
 
 # Audit-Driven Feedback Development
