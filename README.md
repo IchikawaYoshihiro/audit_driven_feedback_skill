@@ -77,8 +77,31 @@ Copy-Item -Recurse audit_driven_feedback_skill/audit-driven-feedback "$env:USERP
 
 - **lint**: `tools/lint_skill.py` がスキルフォーマット（`name` / `description` の制約、
   enum・boolean フィールド、ディレクトリ名一致、本文の相対リンク参照切れ等）を検査します。
-  PR / `main` への push で CI が自動実行します。手元では `python tools/lint_skill.py`
-  （要 `pip install pyyaml`）。
+  `SKILL.md` を再帰的に探索するので、`examples/` 配下のサンプルも対象です。
+  PR / `main` への push で CI が自動実行します。
+
+  手元でも同じ検査を実行できます（PyYAML が無ければ自動で入れて実行します）。
+
+  ```bash
+  # macOS / Linux
+  bash tools/lint.sh
+  # Windows (PowerShell)
+  pwsh tools/lint.ps1
+  ```
+
+  特定のスキルだけ検査したい場合は引数で指定します（例: `bash tools/lint.sh examples/dependabot-maintenance`）。
+  素の Python で直接叩くこともできます（要 `pip install pyyaml`）: `python tools/lint_skill.py`。
+
+- **pre-commit フック（ローカルのガードレール）**: リポジトリに `.githooks/pre-commit` を同梱しています。
+  クローンごとに一度だけ有効化すると、コミット前に自動で lint が走り、フォーマット違反を push 前に止められます。
+
+  ```bash
+  git config core.hooksPath .githooks
+  # macOS / Linux では実行ビットも付けておく（Windows は不要）
+  chmod +x .githooks/pre-commit
+  ```
+
+  フックは CI と同じ `tools/lint_skill.py` を実行します。どうしても回避したいコミットでは `git commit --no-verify` でバイパスできます。
 - **release**: `vX.Y.Z` 形式のタグを push すると、CI が lint を通したうえで
   `audit-driven-feedback-vX.Y.Z.zip` をビルドし、GitHub Release に添付します。
   バージョンはタグで管理します（初回は `v1.0.0`）。

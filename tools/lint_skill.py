@@ -12,8 +12,9 @@ reports actionable messages.
 Usage:
     python tools/lint_skill.py [SKILL_DIR ...]
 
-With no arguments it discovers every ``*/SKILL.md`` under the current directory
-and validates each skill, so it keeps working if more skills are added later.
+With no arguments it recursively discovers every ``SKILL.md`` under the current
+directory (skipping VCS/vendor dirs) and validates each skill, so it keeps
+working as more skills are added later, including samples under ``examples/``.
 
 Constraints enforced follow the Claude Code Skills docs and the Agent Skills
 specification (name/description limits, enum/boolean field types, directory-name
@@ -196,13 +197,21 @@ def lint_skill(skill_dir: Path, rep: Report) -> None:
 def discover(args: list[str]) -> list[Path]:
     if args:
         return [Path(a) for a in args]
-    return sorted({p.parent for p in Path(".").glob("*/SKILL.md")})
+    # Recurse so skills nested under examples/ (or any future subtree) are found,
+    # but skip VCS/vendor/build dirs that may carry unrelated files.
+    skip = {".git", "node_modules", "vendor", ".venv", "venv", "__pycache__", "dist", "build"}
+    found = {
+        p.parent
+        for p in Path(".").rglob("SKILL.md")
+        if not any(part in skip for part in p.parts)
+    }
+    return sorted(found)
 
 
 def main(argv: list[str]) -> int:
     skills = discover(argv)
     if not skills:
-        print("no skills found (looked for */SKILL.md); pass a skill directory explicitly.")
+        print("no skills found (looked for SKILL.md recursively); pass a skill directory explicitly.")
         return 1
 
     rep = Report()
