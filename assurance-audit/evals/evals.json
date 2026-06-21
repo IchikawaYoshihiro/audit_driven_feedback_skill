@@ -1,0 +1,61 @@
+{
+  "skill_name": "assurance-audit",
+  "evals": [
+    {
+      "id": 0,
+      "name": "control-vs-coverage-framing",
+      "prompt": "うちのバックエンドはテストカバレッジ85%あるし CI も緑なんだけど、先日 IDOR で他ユーザーのデータが見えるバグが本番に出た。テストはあったのに防げなかった。カバレッジの数字じゃなくて『守るべき挙動がちゃんとガードされてるか』を見る監査をやりたい。どう進める？",
+      "expected_output": "これは Coverage Audit ではなく Assurance Audit だと位置づけ、各 Protected Behavior を Control(None/Detective/Preventive)→Test(関数単位)→Quality(Strong/Weak)→Status で採点する流れを示す。IDOR の Expected Outcome（他ユーザーのオブジェクトは403/404）を起点に、テストが本質を assert しているか(Strong)、ハッピーパスや mock 経由のみか(Weak)を見る。web-security パックの利用を案内し、カバレッジ％は信頼性の指標にならない点を明言する。",
+      "files": [],
+      "assertions": [
+        {"text": "Coverage Audit と Assurance Audit を区別し、カバレッジ％は採点根拠にならないと述べている", "type": "framing"},
+        {"text": "Control を None/Detective/Preventive の3段階で見ると示している", "type": "control-strength"},
+        {"text": "Expected Outcome(403/404 等)を起点にテスト品質 Strong/Weak を判定する流れを示す", "type": "quality"},
+        {"text": "web-security ドメインパックの利用に言及している", "type": "domain-pack"},
+        {"text": "Status(色)と Criticality(影響度)を混同していない、または健全性として色を出す設計を示す", "type": "status"}
+      ]
+    },
+    {
+      "id": 1,
+      "name": "grep-zero-not-absent",
+      "prompt": "信用取引のキャッシュバッファ規制(R-15)を監査したら、tests/ を 'R-15' で grep しても1件もヒットしなかった。これ『テスト無し』として 🔴 Stale Control に倒していい？known_risks.md には緩和済みって書いてあるんだけど。",
+      "expected_output": "grep 0件で即断しないという規律(反偽陽性)を最重要として示す。R-N タグではなく Control 実体(CashLossBudgetRule 等のクラス名)と Expected Outcome/挙動文字列で関数単位に再検索すべきと案内し、それで多数の実テストが見つかる典型例(タグ0件→クラス名で34関数)を挙げる。再検索しても本当に無ければ初めて Stale Control と判定。安易に 🔴 へ倒さない。",
+      "files": [],
+      "assertions": [
+        {"text": "grep 0件=テスト無し と即断してはいけないと明言している（反偽陽性規律）", "type": "anti-false-positive"},
+        {"text": "R-N タグではなく Control 実体(クラス名)や Expected Outcome/挙動文字列で再検索するよう案内している", "type": "re-search"},
+        {"text": "関数単位で数える(ファイル単位で満足しない)点に触れている", "type": "function-granular"},
+        {"text": "再検索後に本当に不在の場合のみ Stale Control と判定する順序を示している", "type": "status-order"},
+        {"text": "タグ0件→クラス名で多数発見、のような具体例で説明している", "type": "concrete-example"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "inventory-and-threat-discovery-gap",
+      "prompt": "SaaS の課金まわりを監査したい。billing_rules.md はあるんだけど、書いてあるのは『二重課金を防ぐ』だけ。コードには IdempotencyKey も入ってるしテストもある。これで監査は OK ってこと？",
+      "expected_output": "Inventory が存在することと十分であることは別、と指摘し Step -0.5 Threat Discovery を案内する。標準タクソノミ(webhook 再送/プラン制限回避/無料期間悪用/監査ログ欠落 等)と billing_rules.md を差分し、台帳に無い Protected Behavior を『新候補』として最上位に出す。二重課金自体も Expected Outcome(同一リクエストは1回課金)を assert する Strong テストか、logger.called だけの Weak かを確認。saas-billing パックの利用を案内。",
+      "files": [],
+      "assertions": [
+        {"text": "Inventory が存在する≠十分、を指摘し Threat Discovery(台帳の十分性)を行うと示している", "type": "threat-discovery"},
+        {"text": "標準タクソノミと台帳を差分し、未登録の Protected Behavior を新候補として挙げる流れを示す", "type": "candidate-discovery"},
+        {"text": "二重課金テストの Strong(call_count==1 等)/Weak(logger.called のみ)判定に触れている", "type": "quality"},
+        {"text": "webhook 再送/プラン制限回避/無料期間悪用 など忘れられがちな挙動を例示している", "type": "forgotten-behaviors"},
+        {"text": "saas-billing ドメインパックの利用に言及している", "type": "domain-pack"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "structural-weakness-preventive-vs-detective",
+      "prompt": "市場休場日に発注しないようにしたい。今は liveness モニターが『その日のバーが来てるか』を事後に監視してて、休場日はバーが来ないからシグナルも出ない、という作りでカバーできてる。テストも沢山ある。これは 🟢 でいい？",
+      "expected_output": "Control が Detective(事後検知)であり、発注前に取引カレンダーで弾く Preventive ガードが理論上作れるのに無い、という点を Structural Weakness として 🟡 に判定する。Expected Control=Preventive ∧ Actual=Detective のギャップが本質で、テストがいくら多くても色は 🟡 のまま(Count や Quality では救えない)。さらにこの挙動が台帳(known_risks.md)に未登録なら新候補(R-N候補)としても出す。Detective を Preventive と同一視しない規律を明言。",
+      "files": [],
+      "assertions": [
+        {"text": "Detective(事後検知)と Preventive(未然防止)を区別し、同一視していない", "type": "control-strength"},
+        {"text": "Expected=Preventive ∧ Actual=Detective を Structural Weakness 🟡 と判定している", "type": "structural-weakness"},
+        {"text": "テスト本数が多くても色は 🟡 のまま(Count/Quality では覆らない)と述べている", "type": "status-precedence"},
+        {"text": "台帳未登録なら新候補として出す(Candidate Discovery)に触れている", "type": "candidate-discovery"},
+        {"text": "Status(健全性)と Criticality(影響度)を混同していない", "type": "status"}
+      ]
+    }
+  ]
+}
