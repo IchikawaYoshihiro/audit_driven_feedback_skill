@@ -129,6 +129,10 @@ assurance-audit/
 `~/.claude/skills/` に置きます。整合性・防御の信頼性・「このガードは本当に効いているか」
 といった相談で発火します。
 
+> Release の zip は `audit-driven-feedback-vX.Y.Z.zip` と `assurance-audit-vX.Y.Z.zip` の
+> **別ファイル**です（同じ Release に2つ添付されますが、1つのzipに両方入っているわけでは
+> ありません）。どちらか一方だけ使いたい場合はそのzipだけ取得して展開すれば足ります。
+
 ## 背景記事
 
 このスキルは Zenn 記事の方法論を実践手順化したものです。記事が思想、スキルが実践手順、
