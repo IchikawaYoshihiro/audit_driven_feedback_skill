@@ -1,0 +1,69 @@
+{
+  "skill_name": "knowledge-audit",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Scan the AGENTS.md in a project at E:\\dev\\auto-trade for coding conventions or design principles that could be promoted to ~/.claude/knowledge/. Apply the promotion gate to each candidate and report results. No file creation needed.",
+      "expected_output": "A judgment table applying all 5 promotion-gate items to each candidate, organized into three categories: Promote / Decline / SSoT-exception.",
+      "assertions": [
+        {
+          "id": "check_gate_applied",
+          "description": "Are all 5 promotion-gate items (2+ projects / 6-month durability / project-independent / not a Skill / Why articulable) explicitly applied per candidate?",
+          "type": "qualitative"
+        },
+        {
+          "id": "sst_exception_noted",
+          "description": "Is the SSoT exception (AGENTS.md must not be deleted) mentioned?",
+          "type": "presence"
+        },
+        {
+          "id": "three_categories",
+          "description": "Are the three outcome categories (Promote / Decline / SSoT-exception) clearly distinguished?",
+          "type": "qualitative"
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "Read ~/.claude/CLAUDE.md and check whether any project-specific content has leaked into the Policy layer (global). Identify anything that should be demoted. No file changes needed.",
+      "expected_output": "A report assessing each major section of CLAUDE.md as 'appropriate for Policy' or 'project-specific / should be demoted', with demotion rationale where applicable.",
+      "assertions": [
+        {
+          "id": "each_section_checked",
+          "description": "Is at least one major section of CLAUDE.md examined?",
+          "type": "presence"
+        },
+        {
+          "id": "demotion_rationale",
+          "description": "Where demotion candidates exist, is a reason given for why they should be demoted?",
+          "type": "qualitative"
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Run a knowledge-audit on the E:\\dev\\auto-trade project. Scan AGENTS.md, .claude/commands/, and memory/. Perform promotions and demotions.",
+      "expected_output": "Promoted knowledge files created or described; a CLAUDE.md trigger-table update proposed; work summary in the required 4-section format (Promoted / Demoted / Declined / Unchanged).",
+      "assertions": [
+        {
+          "id": "summary_format",
+          "description": "Does the work summary contain all 4 sections: Promoted / Demoted / Promotion declined / Unchanged?",
+          "type": "structure"
+        },
+        {
+          "id": "trigger_table_updated",
+          "description": "Is there a mention of updating the CLAUDE.md trigger table?",
+          "type": "presence"
+        },
+        {
+          "id": "fact_rules_why",
+          "description": "Do the created or proposed knowledge files contain Fact / Rules / Why sections?",
+          "type": "structure"
+        }
+      ],
+      "files": []
+    }
+  ]
+}

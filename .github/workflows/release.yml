@@ -24,6 +24,7 @@ jobs:
         run: |
           zip -r "audit-driven-feedback-${GITHUB_REF_NAME}.zip" audit-driven-feedback
           zip -r "assurance-audit-${GITHUB_REF_NAME}.zip" assurance-audit
+          zip -r "knowledge-audit-${GITHUB_REF_NAME}.zip" knowledge-audit
 
       - name: Create GitHub Release with the bundles
         uses: softprops/action-gh-release@v2
@@ -31,4 +32,5 @@ jobs:
           files: |
             audit-driven-feedback-${{ github.ref_name }}.zip
             assurance-audit-${{ github.ref_name }}.zip
+            knowledge-audit-${{ github.ref_name }}.zip
           generate_release_notes: true
