@@ -3,7 +3,7 @@
   "evals": [
     {
       "id": 0,
-      "prompt": "Scan the AGENTS.md in a project at E:\\dev\\auto-trade for coding conventions or design principles that could be promoted to ~/.claude/knowledge/. Apply the promotion gate to each candidate and report results. No file creation needed.",
+      "prompt": "Scan the AGENTS.md in a project at ~/projects/sample-app for coding conventions or design principles that could be promoted to ~/.claude/knowledge/. Apply the promotion gate to each candidate and report results. No file creation needed.",
       "expected_output": "A judgment table applying all 5 promotion-gate items to each candidate, organized into three categories: Promote / Decline / SSoT-exception.",
       "assertions": [
         {
@@ -44,7 +44,7 @@
     },
     {
       "id": 2,
-      "prompt": "Run a knowledge-audit on the E:\\dev\\auto-trade project. Scan AGENTS.md, .claude/commands/, and memory/. Perform promotions and demotions.",
+      "prompt": "Run a knowledge-audit on the ~/projects/sample-app project. Scan AGENTS.md, .claude/commands/, and memory/. Perform promotions and demotions.",
       "expected_output": "Promoted knowledge files created or described; a CLAUDE.md trigger-table update proposed; work summary in the required 4-section format (Promoted / Demoted / Declined / Unchanged).",
       "assertions": [
         {
